@@ -1,0 +1,5 @@
+<bin name="GraphFromJson_t" file="GraphFromJson_t.cc">
+  <use name="TruthGraphAnalysis/Common"/>
+  <use name="SimDataFormats/TruthInfo"/>
+  <use name="cppunit"/>
+</bin>

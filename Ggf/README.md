@@ -1,0 +1,29 @@
+# Ggf
+
+**Preset:** `ggf`. **Sample:** H125GGgluonfusion ggf.
+
+## The question
+
+What does the detector see of the Higgs: how many reconstructable products, and which fraction of its energy is visible?
+
+## How the graph answers it
+
+From `signal`, `reconstructableFromSignal`. See `cpp/Ggf.cc` and `py/ggf.py`: the two print the same lines.
+
+## Run it
+
+```bash
+# C++, in a CMSSW area with the branch and this repository checked out
+cmsRun TruthGraphAnalysis/Common/test/runExample_cfg.py step3.root --example Ggf --rebuild
+
+# python, on a JSON dump or an EDM file
+python3 TruthGraphAnalysis/Ggf/py/ggf.py TruthGraphAnalysis/Common/fixtures/ggf.json
+```
+
+## Expected output on the fixture
+
+`Common/fixtures/ggf.json`, one event. Both languages print exactly `test/expected.txt`:
+
+```
+ggf: Higgs E 166.44 GeV -> 2 reconstructable products, visible fraction 1.000
+```

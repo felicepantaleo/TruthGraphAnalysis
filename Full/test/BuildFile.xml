@@ -1,0 +1,8 @@
+<bin name="Full_t" file="../cpp/Full.cc,Full_t.cc">
+  <use name="PhysicsTools/TruthInfo"/>
+  <use name="SimDataFormats/TruthInfo"/>
+  <use name="TruthGraphAnalysis/Common"/>
+  <use name="cppunit"/>
+</bin>
+
+<test name="full_py_t" command="python3 ${LOCALTOP}/src/TruthGraphAnalysis/Full/test/full_test.py"/>

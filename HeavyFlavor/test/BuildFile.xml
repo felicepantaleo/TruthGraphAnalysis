@@ -1,0 +1,8 @@
+<bin name="HeavyFlavor_t" file="../cpp/HeavyFlavor.cc,HeavyFlavor_t.cc">
+  <use name="PhysicsTools/TruthInfo"/>
+  <use name="SimDataFormats/TruthInfo"/>
+  <use name="TruthGraphAnalysis/Common"/>
+  <use name="cppunit"/>
+</bin>
+
+<test name="heavyflavor_py_t" command="python3 ${LOCALTOP}/src/TruthGraphAnalysis/HeavyFlavor/test/heavyflavor_test.py"/>

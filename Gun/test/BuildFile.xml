@@ -1,0 +1,8 @@
+<bin name="Gun_t" file="../cpp/Gun.cc,Gun_t.cc">
+  <use name="PhysicsTools/TruthInfo"/>
+  <use name="SimDataFormats/TruthInfo"/>
+  <use name="TruthGraphAnalysis/Common"/>
+  <use name="cppunit"/>
+</bin>
+
+<test name="gun_py_t" command="python3 ${LOCALTOP}/src/TruthGraphAnalysis/Gun/test/gun_test.py"/>

@@ -1,0 +1,8 @@
+<bin name="Vh_t" file="../cpp/Vh.cc,Vh_t.cc">
+  <use name="PhysicsTools/TruthInfo"/>
+  <use name="SimDataFormats/TruthInfo"/>
+  <use name="TruthGraphAnalysis/Common"/>
+  <use name="cppunit"/>
+</bin>
+
+<test name="vh_py_t" command="python3 ${LOCALTOP}/src/TruthGraphAnalysis/Vh/test/vh_test.py"/>

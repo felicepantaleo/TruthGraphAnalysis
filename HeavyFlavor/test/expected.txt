@@ -1,0 +1,2 @@
+heavyflavor: 521 pt 54.31 GeV, flight 0.011 cm, 1 charm hadron below
+heavyflavor: -511 pt 6.96 GeV, flight 0.096 cm, 2 charm hadrons below

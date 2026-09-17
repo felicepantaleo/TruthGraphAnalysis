@@ -1,0 +1,8 @@
+<bin name="Resonance_t" file="../cpp/Resonance.cc,Resonance_t.cc">
+  <use name="PhysicsTools/TruthInfo"/>
+  <use name="SimDataFormats/TruthInfo"/>
+  <use name="TruthGraphAnalysis/Common"/>
+  <use name="cppunit"/>
+</bin>
+
+<test name="resonance_py_t" command="python3 ${LOCALTOP}/src/TruthGraphAnalysis/Resonance/test/resonance_test.py"/>

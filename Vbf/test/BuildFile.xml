@@ -1,0 +1,8 @@
+<bin name="Vbf_t" file="../cpp/Vbf.cc,Vbf_t.cc">
+  <use name="PhysicsTools/TruthInfo"/>
+  <use name="SimDataFormats/TruthInfo"/>
+  <use name="TruthGraphAnalysis/Common"/>
+  <use name="cppunit"/>
+</bin>
+
+<test name="vbf_py_t" command="python3 ${LOCALTOP}/src/TruthGraphAnalysis/Vbf/test/vbf_test.py"/>

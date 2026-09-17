@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  format:
+    name: clang-format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install clang-format==21.1.4
+      - name: Every C++ file matches the CMSSW style
+        run: clang-format --style=file --dry-run -Werror $(git ls-files '*.cc' '*.h')
+
+  python:
+    name: python tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch graphTools from the CMSSW branch
+        run: |
+          mkdir -p pyroot/PhysicsTools/TruthInfo pyroot/TruthGraphAnalysis/Common
+          touch pyroot/PhysicsTools/__init__.py pyroot/PhysicsTools/TruthInfo/__init__.py
+          touch pyroot/TruthGraphAnalysis/__init__.py pyroot/TruthGraphAnalysis/Common/__init__.py
+          curl -sSfL https://raw.githubusercontent.com/felicepantaleo/cmssw/truth-adaptive-associator-v1/PhysicsTools/TruthInfo/python/graphTools.py \
+            -o pyroot/PhysicsTools/TruthInfo/graphTools.py
+          cp Common/python/*.py pyroot/TruthGraphAnalysis/Common/
+      - name: Run every python test
+        env:
+          PYTHONPATH: ${{ github.workspace }}/pyroot
+        run: |
+          for t in */test/*_test.py; do echo "== $t"; python3 "$t" || exit 1; done
+
+  cmssw:
+    name: CMSSW build, clang-tidy and tests
+    runs-on: ubuntu-latest
+    container:
+      image: cmssw/el8:x86_64
+      options: -v /cvmfs:/cvmfs:shared
+    env:
+      RELEASE: CMSSW_20_1_X_2026-09-13-2300
+    steps:
+      - uses: cvmfs-contrib/github-action-cvmfs@v4
+        with:
+          cvmfs_repositories: cms.cern.ch,cms-ib.cern.ch
+      - uses: actions/checkout@v4
+        with:
+          path: example-repo
+      - name: Build against the branch
+        shell: bash
+        run: |
+          source /cvmfs/cms.cern.ch/cmsset_default.sh
+          scram project $RELEASE
+          cd $RELEASE/src
+          eval "$(scram runtime -sh)"
+          git config --global user.name ci && git config --global user.email ci@example.invalid
+          git cms-init --upstream-only
+          git cms-merge-topic felicepantaleo:truth-adaptive-associator-v1
+          cp -r "$GITHUB_WORKSPACE/example-repo" TruthGraphAnalysis
+          scram b -j 2
+          scram build code-checks
+          scram b runtests

@@ -1,0 +1,8 @@
+<bin name="Top_t" file="../cpp/Top.cc,Top_t.cc">
+  <use name="PhysicsTools/TruthInfo"/>
+  <use name="SimDataFormats/TruthInfo"/>
+  <use name="TruthGraphAnalysis/Common"/>
+  <use name="cppunit"/>
+</bin>
+
+<test name="top_py_t" command="python3 ${LOCALTOP}/src/TruthGraphAnalysis/Top/test/top_test.py"/>

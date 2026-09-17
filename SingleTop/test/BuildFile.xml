@@ -1,0 +1,8 @@
+<bin name="SingleTop_t" file="../cpp/SingleTop.cc,SingleTop_t.cc">
+  <use name="PhysicsTools/TruthInfo"/>
+  <use name="SimDataFormats/TruthInfo"/>
+  <use name="TruthGraphAnalysis/Common"/>
+  <use name="cppunit"/>
+</bin>
+
+<test name="singletop_py_t" command="python3 ${LOCALTOP}/src/TruthGraphAnalysis/SingleTop/test/singletop_test.py"/>

@@ -1,0 +1,8 @@
+<bin name="Ggf_t" file="../cpp/Ggf.cc,Ggf_t.cc">
+  <use name="PhysicsTools/TruthInfo"/>
+  <use name="SimDataFormats/TruthInfo"/>
+  <use name="TruthGraphAnalysis/Common"/>
+  <use name="cppunit"/>
+</bin>
+
+<test name="ggf_py_t" command="python3 ${LOCALTOP}/src/TruthGraphAnalysis/Ggf/test/ggf_test.py"/>

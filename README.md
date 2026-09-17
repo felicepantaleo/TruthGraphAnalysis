@@ -1,1 +1,74 @@
 # TruthGraphAnalysis
+
+Worked analyses on the CMS MC-truth graph (`truth::Graph`, cms-sw/cmssw PR #51829), one
+per selection preset of `PhysicsTools/TruthInfo/python/truthGraphSelections.py`. Every
+example exists twice, in C++ and in python, prints the same lines on the same event, and
+is tested against a committed graph of one event.
+
+| example | preset | question |
+|---|---|---|
+| [Gun](Gun/README.md) | `gun` | Per gun particle: how many reconstructable products does it have, and how many of its descendants reach the calorimeter? |
+| [Resonance](Resonance/README.md) | `resonance` | Which two leptons does the Z decay to, and does their invariant mass reproduce the generator mass of the Z? |
+| [Vbf](Vbf/README.md) | `vbf` | What are the dijet mass and the rapidity gap of the two quarks that recoil against the Higgs? |
+| [Ggf](Ggf/README.md) | `ggf` | What does the detector see of the Higgs: how many reconstructable products, and which fraction of its energy is visible? |
+| [Vh](Vh/README.md) | `vh` | Which vector boson was produced together with the Higgs, and how did it decay? |
+| [Top](Top/README.md) | `top` | For each top: is there a b, how did the W decay, how large is its subgraph; and what class is the event, all hadronic, semileptonic or dilepton? A W to tau nu counts as leptonic. |
+| [SingleTop](SingleTop/README.md) | `singletop` | What was produced together with the top: the recoil quark, the associated W, or the b? |
+| [Diboson](Diboson/README.md) | `diboson` | What is the mass of the boson pair, and how did each boson decay? |
+| [HeavyFlavor](HeavyFlavor/README.md) | `heavyflavor` | How far does each b hadron fly before it decays, and how many charm hadrons does it leave below it? |
+| [Full](Full/README.md) | `full` | What does the whole event hold, interaction by interaction, and how large is the reconstructable final state of the signal and of the pile-up? |
+
+## Layout
+
+Each example is a CMSSW package, so `scram` builds and tests it:
+
+```
+<Example>/
+  README.md              the physics question, how to run, the expected output
+  cpp/<Example>.h        run(graph, out): the analysis as a free function
+  cpp/<Example>.cc
+  cpp/<Example>Plugin.cc an EDAnalyzer that runs it in cmsRun
+  py/<example>.py        the same analysis with PhysicsTools.TruthInfo.graphTools
+  plugins/BuildFile.xml  builds cpp/ as the plugin library
+  test/                  the C++ and the python test, and expected.txt they both match
+```
+
+`Common/` holds `GraphFromJson`, which builds a `truth::Graph` from the JSON that
+`TruthLogicalGraphDumper` writes, and the fixtures: one dumped event per example under
+`Common/fixtures/`. The tests run every example on its fixture and compare the output,
+character by character, with `test/expected.txt`, in both languages.
+
+## Setup
+
+The examples read the graph through the interface of branch `truth-adaptive-associator-v1`
+(felicepantaleo/cmssw), which is PR #51829. In a CMSSW area:
+
+```bash
+cmsrel CMSSW_20_1_X_2026-09-13-2300 && cd CMSSW_20_1_X_2026-09-13-2300/src && cmsenv
+git cms-init
+git cms-merge-topic felicepantaleo:truth-adaptive-associator-v1
+git clone git@github.com:felicepantaleo/TruthGraphAnalysis.git TruthGraphAnalysis
+scram b -j 8
+scram b runtests
+```
+
+## Running an example
+
+```bash
+# C++: a plugin, on a file that holds the logical graph. A production file holds the
+# graph with no selection preset, so --rebuild builds it again with the preset from the
+# GEN and SIM record in the file. A gun takes its species from the fragment name.
+cmsRun TruthGraphAnalysis/Common/test/runExample_cfg.py step3.root --example Top --rebuild
+cmsRun TruthGraphAnalysis/Common/test/runExample_cfg.py step3.root --example Gun --rebuild --fragment TenTau_E_15_500
+
+# python: on a JSON dump (TruthLogicalGraphDumper with jsonFile set), or on an EDM file
+python3 TruthGraphAnalysis/Top/py/top.py TruthGraphAnalysis/Common/fixtures/top.json
+python3 TruthGraphAnalysis/Top/py/top.py step3.root
+```
+
+## Code style
+
+`.clang-format` and `.clang-tidy` are the ones of the CMSSW release, so
+`scram build code-format` and `scram build code-checks` apply as in any CMSSW package.
+The CI checks the format on every push and runs the python tests without CMSSW; the
+CMSSW job builds the packages against the branch, runs clang-tidy and every test.

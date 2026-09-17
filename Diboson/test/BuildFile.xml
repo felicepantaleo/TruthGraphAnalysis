@@ -1,0 +1,8 @@
+<bin name="Diboson_t" file="../cpp/Diboson.cc,Diboson_t.cc">
+  <use name="PhysicsTools/TruthInfo"/>
+  <use name="SimDataFormats/TruthInfo"/>
+  <use name="TruthGraphAnalysis/Common"/>
+  <use name="cppunit"/>
+</bin>
+
+<test name="diboson_py_t" command="python3 ${LOCALTOP}/src/TruthGraphAnalysis/Diboson/test/diboson_test.py"/>

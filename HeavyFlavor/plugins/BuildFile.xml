@@ -1,0 +1,10 @@
+<use name="FWCore/Framework"/>
+<use name="FWCore/MessageLogger"/>
+<use name="FWCore/ParameterSet"/>
+<use name="PhysicsTools/TruthInfo"/>
+<use name="SimDataFormats/TruthInfo"/>
+<use name="TruthGraphAnalysis/Common"/>
+
+<library file="../cpp/HeavyFlavor.cc,../cpp/HeavyFlavorPlugin.cc" name="TruthGraphHeavyFlavorExamplePlugins">
+  <flags EDM_PLUGIN="1"/>
+</library>
