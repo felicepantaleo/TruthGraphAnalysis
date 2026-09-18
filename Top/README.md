@@ -4,11 +4,11 @@
 
 ## The question
 
-For each top: is there a b, how did the W decay, how large is its subgraph; and what class is the event, all hadronic, semileptonic or dilepton? A W to tau nu counts as leptonic.
+For each top: is there a b, how did the W decay, how large is its subgraph; and what class is the event, all hadronic, semileptonic or dilepton? A W to tau nu counts as leptonic. An event that is not two tops with both W decays found is `unclassified`, which is also what a graph with no preset gives, since its signal level is empty.
 
 ## How the graph answers it
 
-From `signal`, `forEachChildId`, descendants. See `cpp/Top.cc` and `py/top.py`: the two print the same lines.
+From `signal`, keeping the tops, the first b and W child of each, and its descendants. See `cpp/Top.cc` and `py/top.py`: the two print the same lines.
 
 ## Run it
 

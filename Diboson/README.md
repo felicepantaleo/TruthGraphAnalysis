@@ -1,6 +1,6 @@
 # Diboson
 
-**Preset:** `diboson`. **Sample:** WWTo2L2Nu diboson (the fixture is a ttbar event seeded on its two W).
+**Preset:** `diboson`. **Sample:** WWTo2L2Nu_14TeV_TuneCP5, produced with the custom fragment in `PhysicsTools/TruthInfo/python`.
 
 ## The question
 
@@ -17,15 +17,15 @@ From `signal`. See `cpp/Diboson.cc` and `py/diboson.py`: the two print the same 
 cmsRun TruthGraphAnalysis/Common/test/runExample_cfg.py step3.root --example Diboson --rebuild
 
 # python, on a JSON dump or an EDM file
-python3 TruthGraphAnalysis/Diboson/py/diboson.py TruthGraphAnalysis/Common/fixtures/top_diboson_seeds.json
+python3 TruthGraphAnalysis/Diboson/py/diboson.py TruthGraphAnalysis/Common/fixtures/diboson.json
 ```
 
 ## Expected output on the fixture
 
-`Common/fixtures/top_diboson_seeds.json`, one event. Both languages print exactly `test/expected.txt`:
+`Common/fixtures/diboson.json`, one event. Both languages print exactly `test/expected.txt`:
 
 ```
-diboson: m(VV) 205.66 GeV
-  24 pt 57.06 GeV, decay hadronic
-  -24 pt 66.60 GeV, decay hadronic
+diboson: m(VV) 160.09 GeV
+  -24 pt 24.39 GeV, decay leptonic
+  24 pt 46.13 GeV, decay leptonic
 ```

@@ -19,7 +19,7 @@ import vh  # noqa: E402
 
 class TestVh(unittest.TestCase):
     def test_matches_the_expected_output(self):
-        graph = TruthGraphView.fromJson(os.path.join(HERE, "..", "..", "Common", "fixtures", "ggf.json"))
+        graph = TruthGraphView.fromJson(os.path.join(HERE, "..", "..", "Common", "fixtures", "vh.json"))
         out = io.StringIO()
         vh.run(graph, out)
         with open(os.path.join(HERE, "expected.txt"), encoding="utf-8") as handle:

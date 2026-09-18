@@ -1,2 +1,1 @@
-singletop: top with partner -6 pt 55.76 GeV
-singletop: top with partner 6 pt 49.58 GeV
+singletop: top with recoil quark -1 pt 14.49 GeV

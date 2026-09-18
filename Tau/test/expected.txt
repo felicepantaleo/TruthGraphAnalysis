@@ -1,0 +1,15 @@
+tau -15 E 113.18 GeV: 1prong0pi0, reco mode 0, 1 prongs 0 pi0 0 photons, visible energy 0.40
+tau 15 E 113.18 GeV: 1prong0pi0, reco mode 0, 1 prongs 0 pi0 0 photons, visible energy 0.02
+tau -15 E 37.37 GeV: 3prong0pi0, reco mode 10, 3 prongs 0 pi0 0 photons, visible energy 0.47
+tau 15 E 37.37 GeV: 3prong0pi0, reco mode 10, 3 prongs 0 pi0 0 photons, visible energy 0.91
+tau -15 E 26.27 GeV: electron, reco mode -1, 0 prongs 0 pi0 0 photons, visible energy 0.18
+tau 15 E 26.27 GeV: 3prong1pi0, reco mode 11, 3 prongs 1 pi0 0 photons, visible energy 0.84
+tau -15 E 107.25 GeV: 1prong1pi0, reco mode 1, 1 prongs 1 pi0 0 photons, visible energy 0.69
+tau 15 E 107.25 GeV: 1prong1pi0, reco mode 1, 1 prongs 1 pi0 0 photons, visible energy 0.40
+tau -15 E 177.58 GeV: 3prong0pi0, reco mode 10, 3 prongs 0 pi0 0 photons, visible energy 0.61
+tau 15 E 177.58 GeV: electron, reco mode -1, 0 prongs 0 pi0 0 photons, visible energy 0.19
+mode 1prong0pi0: 2
+mode 1prong1pi0: 2
+mode 3prong0pi0: 3
+mode 3prong1pi0: 1
+mode electron: 2

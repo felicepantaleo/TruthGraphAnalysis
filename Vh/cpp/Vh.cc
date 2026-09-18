@@ -3,7 +3,6 @@
 #include "TruthGraphAnalysis/Vh/cpp/Vh.h"
 
 #include <cmath>
-#include <map>
 #include <string>
 #include <vector>
 
@@ -14,7 +13,6 @@
 namespace tga::vh {
 
   using tga::decayMode;
-  using tga::firstChildWithPdgId;
   using tga::fixed;
 
   void run(truth::Graph const& graph, std::ostream& out) {

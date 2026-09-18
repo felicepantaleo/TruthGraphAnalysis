@@ -1,1 +1,1 @@
-resonance 23 -> 11 -11: m(ll) 87.25 GeV, generator mass 87.25 GeV
+resonance 23 -> 11 -11: generator mass 87.25 GeV, m(ll) 87.25 GeV from the decay, 75.91 GeV after FSR

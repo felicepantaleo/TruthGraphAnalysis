@@ -10,18 +10,14 @@ The C++ twin is cpp/Gun.cc and prints the same lines.
 """
 
 import argparse
-import math
 import sys
 
-from PhysicsTools.TruthInfo.graphTools import bunchCrossingOf, eventIndexOf
-from TruthGraphAnalysis.Common.exampleSupport import (LEPTONS, NEUTRINOS, add, decayMode, eta,
-                                                      firstChildWithPdgId, graphsFrom, mass,
-                                                      productionSiblings, pt)
+from TruthGraphAnalysis.Common.exampleSupport import eventNumber, graphsFrom
 
 
 def run(graph, out=sys.stdout):
     """Prints one line per object of interest."""
-    for seed in graph.particlesOfLevel("signal"):
+    for seed in graph.signalParticles():
         # The gun particle and everything below it: a stable gun particle is its own product.
         subgraph = [seed] + graph.descendants(seed)
         products = sum(1 for i in subgraph if graph.isAtLevel(i, "reconstructableFromSignal"))
@@ -36,7 +32,7 @@ def main():
     parser.add_argument("inputs", nargs="+", help="an EDM file, or one or more JSON dumps")
     args = parser.parse_args()
     for graph in graphsFrom(args.inputs, args.maxEvents):
-        print("== event %s" % (graph.eventId,))
+        print("== event %s" % eventNumber(graph))
         run(graph)
 
 

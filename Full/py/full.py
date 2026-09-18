@@ -10,13 +10,10 @@ The C++ twin is cpp/Full.cc and prints the same lines.
 """
 
 import argparse
-import math
 import sys
 
 from PhysicsTools.TruthInfo.graphTools import bunchCrossingOf, eventIndexOf
-from TruthGraphAnalysis.Common.exampleSupport import (LEPTONS, NEUTRINOS, add, decayMode, eta,
-                                                      firstChildWithPdgId, graphsFrom, mass,
-                                                      productionSiblings, pt)
+from TruthGraphAnalysis.Common.exampleSupport import eventNumber, graphsFrom
 
 
 def run(graph, out=sys.stdout):
@@ -37,7 +34,7 @@ def main():
     parser.add_argument("inputs", nargs="+", help="an EDM file, or one or more JSON dumps")
     args = parser.parse_args()
     for graph in graphsFrom(args.inputs, args.maxEvents):
-        print("== event %s" % (graph.eventId,))
+        print("== event %s" % eventNumber(graph))
         run(graph)
 
 

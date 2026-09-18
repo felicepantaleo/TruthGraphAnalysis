@@ -10,22 +10,21 @@ The C++ twin is cpp/Ggf.cc and prints the same lines.
 """
 
 import argparse
-import math
 import sys
 
-from PhysicsTools.TruthInfo.graphTools import bunchCrossingOf, eventIndexOf
-from TruthGraphAnalysis.Common.exampleSupport import (LEPTONS, NEUTRINOS, add, decayMode, eta,
-                                                      firstChildWithPdgId, graphsFrom, mass,
-                                                      productionSiblings, pt)
+from TruthGraphAnalysis.Common.exampleSupport import NEUTRINOS, eventNumber, graphsFrom, isParton
 
 
 def run(graph, out=sys.stdout):
     """Prints one line per object of interest."""
-    for higgs in graph.particlesOfLevel("signal"):
-        products = [i for i in graph.descendants(higgs) if graph.isAtLevel(i, "reconstructableFromSignal")]
+    for higgs in graph.signalParticles():
+        members = sorted(graph.descendants(higgs))  # id order, as Branch::members sums them
+        products = [i for i in members if graph.isAtLevel(i, "reconstructableFromSignal")]
         visible = sum(graph.p4(i)[3] for i in products if abs(graph.pdgId(i)) not in NEUTRINOS)
-        out.write("ggf: Higgs E %.2f GeV -> %d reconstructable products, visible fraction %.3f\n"
-                  % (graph.p4(higgs)[3], len(products), visible / graph.p4(higgs)[3]))
+        coloured = any(isParton(graph.pdgId(i)) for i in members)
+        fraction = "n/a, coloured decay" if coloured else "%.3f" % (visible / graph.p4(higgs)[3])
+        out.write("ggf: Higgs E %.2f GeV -> %d reconstructable products, visible fraction %s\n"
+                  % (graph.p4(higgs)[3], len(products), fraction))
 
 
 def main():
@@ -34,7 +33,7 @@ def main():
     parser.add_argument("inputs", nargs="+", help="an EDM file, or one or more JSON dumps")
     args = parser.parse_args()
     for graph in graphsFrom(args.inputs, args.maxEvents):
-        print("== event %s" % (graph.eventId,))
+        print("== event %s" % eventNumber(graph))
         run(graph)
 
 

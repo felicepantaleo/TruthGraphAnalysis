@@ -31,6 +31,7 @@ public:
     std::ostringstream out;
     tga::ggf::run(graph, out);
     std::ifstream expectedFile(path("Ggf/test/expected.txt"));
+    CPPUNIT_ASSERT_MESSAGE("test/expected.txt is missing", expectedFile.is_open());
     std::stringstream expected;
     expected << expectedFile.rdbuf();
     CPPUNIT_ASSERT_EQUAL(expected.str(), out.str());

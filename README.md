@@ -1,9 +1,10 @@
 # TruthGraphAnalysis
 
-Worked analyses on the CMS MC-truth graph (`truth::Graph`, cms-sw/cmssw PR #51829), one
-per selection preset of `PhysicsTools/TruthInfo/python/truthGraphSelections.py`. Every
-example exists twice, in C++ and in python, prints the same lines on the same event, and
-is tested against a committed graph of one event.
+Worked analyses on the CMS MC-truth graph (`truth::Graph`, cms-sw/cmssw PR #51829): one
+per selection preset of `PhysicsTools/TruthInfo/python/truthGraphSelections.py`, plus one
+on the tau levels, which need no preset. Every example exists twice, in C++ and in python,
+prints the same lines on the same event, and is tested against a committed graph of one
+event.
 
 | example | preset | question |
 |---|---|---|
@@ -17,6 +18,7 @@ is tested against a committed graph of one event.
 | [Diboson](Diboson/README.md) | `diboson` | What is the mass of the boson pair, and how did each boson decay? |
 | [HeavyFlavor](HeavyFlavor/README.md) | `heavyflavor` | How far does each b hadron fly before it decays, and how many charm hadrons does it leave below it? |
 | [Full](Full/README.md) | `full` | What does the whole event hold, interaction by interaction, and how large is the reconstructable final state of the signal and of the pile-up? |
+| [Tau](Tau/README.md) | none, levels only | How did each tau decay: how many charged hadrons and neutral pions, which decay mode tau reconstruction would call it, and how much of the tau energy is visible? |
 
 ## Layout
 
@@ -37,6 +39,15 @@ Each example is a CMSSW package, so `scram` builds and tests it:
 `TruthLogicalGraphDumper` writes, and the fixtures: one dumped event per example under
 `Common/fixtures/`. The tests run every example on its fixture and compare the output,
 character by character, with `test/expected.txt`, in both languages.
+
+## Where the two languages read the levels
+
+The C++ recomputes a level from the graph (`truth::particlesAtLevel`, `truth::particlesAtLevels`,
+`truth::branchesAtLevel`). Python has no level algorithm, so it reads the flags stamped on each
+particle when the file was written. On a file written by the current release the two agree,
+and the tests prove it on every fixture. On a file written before a level definition changed,
+they differ, and the C++ is the current definition. For example, `bHadrons` kept the first B
+hadron of a chain before 2026-08-20 and keeps the weakly decaying one since.
 
 ## Setup
 

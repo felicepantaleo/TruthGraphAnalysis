@@ -23,6 +23,8 @@ PRESET_OF = {
     "Diboson": "diboson",
     "HeavyFlavor": "heavyflavor",
     "Full": "full",
+    # The tau levels are graph levels, not the signal, so any preset keeps them.
+    "Tau": "full",
 }
 
 parser = ArgumentParser()
@@ -35,8 +37,12 @@ parser.add_argument("--rebuild", action="store_true",
 parser.add_argument("--fragment", default=None,
                     help="with --rebuild, resolve the selection from this generator fragment name")
 args = parser.parse_args()
-if "/" not in args.inputFile and ":" not in args.inputFile:
+# A path with no scheme is a local file, relative or absolute; PoolSource would read it
+# as a logical file name otherwise.
+if ":" not in args.inputFile:
     args.inputFile = "file:" + args.inputFile
+if args.rebuild and args.example == "Gun" and args.fragment is None:
+    parser.error("--example Gun --rebuild needs --fragment: the gun species comes from the fragment name")
 
 process = cms.Process("EXAMPLE")
 process.load("FWCore.MessageService.MessageLogger_cfi")

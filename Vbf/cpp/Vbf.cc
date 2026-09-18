@@ -3,7 +3,6 @@
 #include "TruthGraphAnalysis/Vbf/cpp/Vbf.h"
 
 #include <cmath>
-#include <map>
 #include <string>
 #include <vector>
 
@@ -13,16 +12,18 @@
 
 namespace tga::vbf {
 
-  using tga::decayMode;
-  using tga::firstChildWithPdgId;
   using tga::fixed;
 
   void run(truth::Graph const& graph, std::ostream& out) {
     const auto higgs = graph.signalParticles();
+    // The tagging quarks are the partons produced with the Higgs. The parton-jet level is
+    // not the answer: it also holds the quarks a hadronic Higgs decay makes.
     std::vector<truth::Particle> tagging;
-    for (auto const& parton : truth::particlesAtLevel(graph, truth::Level::PartonJets)) {
-      if (parton.data().isSignal()) {
-        tagging.push_back(parton);
+    if (!higgs.empty()) {
+      for (auto const& sibling : higgs.front().productionSiblings()) {
+        if (truth::isParton(sibling.pdgId())) {
+          tagging.push_back(sibling);
+        }
       }
     }
     if (tagging.size() < 2) {

@@ -8,7 +8,7 @@ What are the dijet mass and the rapidity gap of the two quarks that recoil again
 
 ## How the graph answers it
 
-From `signal`, `partonJets`. See `cpp/Vbf.cc` and `py/vbf.py`: the two print the same lines.
+From `signal`, the production siblings of the Higgs that are partons, ordered by pt. The `partonJets` level is not the answer: it also holds the quarks a hadronic Higgs decay makes, which often have the highest pt. See `cpp/Vbf.cc` and `py/vbf.py`: the two print the same lines.
 
 ## Run it
 

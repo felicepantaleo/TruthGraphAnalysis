@@ -14,14 +14,14 @@ sys.path.insert(0, os.path.join(HERE, "..", "py"))
 
 from PhysicsTools.TruthInfo.graphTools import TruthGraphView  # noqa: E402
 
-import singletop  # noqa: E402
+import tau  # noqa: E402
 
 
-class TestSingleTop(unittest.TestCase):
+class TestTau(unittest.TestCase):
     def test_matches_the_expected_output(self):
-        graph = TruthGraphView.fromJson(os.path.join(HERE, "..", "..", "Common", "fixtures", "singletop.json"))
+        graph = TruthGraphView.fromJson(os.path.join(HERE, "..", "..", "Common", "fixtures", "tentau.json"))
         out = io.StringIO()
-        singletop.run(graph, out)
+        tau.run(graph, out)
         with open(os.path.join(HERE, "expected.txt"), encoding="utf-8") as handle:
             self.assertEqual(handle.read(), out.getvalue())
 

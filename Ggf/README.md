@@ -8,7 +8,7 @@ What does the detector see of the Higgs: how many reconstructable products, and 
 
 ## How the graph answers it
 
-From `signal`, `reconstructableFromSignal`. See `cpp/Ggf.cc` and `py/ggf.py`: the two print the same lines.
+From `signal`, `reconstructableFromSignal`. The visible fraction is only defined for a colourless decay such as H to gamma gamma or H to ZZ to 4 leptons. In a coloured decay such as H to bb the products hadronize with partons from outside the Higgs, so they carry that energy too and the fraction would exceed 1; the example prints `n/a, coloured decay` instead. See `cpp/Ggf.cc` and `py/ggf.py`: the two print the same lines.
 
 ## Run it
 

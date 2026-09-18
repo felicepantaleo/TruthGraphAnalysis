@@ -1,12 +1,20 @@
 # Original author: Felice Pantaleo (CERN) <felice.pantaleo@cern.ch>
 
-"""What every python example needs beyond graphTools: kinematics from a p4 tuple, a decay
-mode, the production siblings, and the first child of a species."""
+"""What the python examples need beyond graphTools: kinematics from a p4 tuple, the species
+sets the C++ interface defines, a decay mode, and the first child of a species."""
 
 import math
 
 LEPTONS = (11, 13, 15)
 NEUTRINOS = (12, 14, 16)
+# truth::isParton: quarks and gluons.
+PARTONS = (1, 2, 3, 4, 5, 6, 21)
+# truth::isWeakBoson: the W and the Z, not the Higgs.
+WEAK_BOSONS = (23, 24)
+
+
+def isParton(pdgId):
+    return abs(pdgId) in PARTONS
 
 
 def mass(p4):
@@ -40,14 +48,15 @@ def decayMode(graph, boson):
     pdgIds = [abs(graph.pdgId(c)) for c in graph.children(graph.lastCopy(boson))]
     if any(p in LEPTONS for p in pdgIds):
         return "leptonic"
-    if any(p <= 6 for p in pdgIds):
+    if any(p in PARTONS for p in pdgIds):
         return "hadronic"
     return "none"
 
 
-def productionSiblings(graph, particle):
-    """The other particles produced where this one was."""
-    return [s for v in graph.productionVertices(particle) for s in graph.outgoingParticles(v) if s != particle]
+def eventNumber(graph):
+    """The event number alone, as the C++ plugins print it."""
+    eventId = graph.eventId
+    return eventId[-1] if isinstance(eventId, tuple) else eventId
 
 
 def graphsFrom(paths, maxEvents=-1):

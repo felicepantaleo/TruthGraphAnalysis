@@ -1,6 +1,6 @@
 # Vh
 
-**Preset:** `vh`. **Sample:** ZHToBB_ZToLL vh (the fixture is a ggF event, where the example prints nothing).
+**Preset:** `vh`. **Sample:** ZHToBB_ZToLL_14TeV_TuneCP5, produced with the custom fragment in `PhysicsTools/TruthInfo/python`.
 
 ## The question
 
@@ -17,13 +17,13 @@ From `signal`, the production siblings of the Higgs. See `cpp/Vh.cc` and `py/vh.
 cmsRun TruthGraphAnalysis/Common/test/runExample_cfg.py step3.root --example Vh --rebuild
 
 # python, on a JSON dump or an EDM file
-python3 TruthGraphAnalysis/Vh/py/vh.py TruthGraphAnalysis/Common/fixtures/ggf.json
+python3 TruthGraphAnalysis/Vh/py/vh.py TruthGraphAnalysis/Common/fixtures/vh.json
 ```
 
 ## Expected output on the fixture
 
-`Common/fixtures/ggf.json`, one event. Both languages print exactly `test/expected.txt`:
+`Common/fixtures/vh.json`, one event. Both languages print exactly `test/expected.txt`:
 
 ```
-(no output: the fixture holds no object this example asks about)
+vh: Higgs with 23 pt 10.88 GeV, boson decay leptonic
 ```

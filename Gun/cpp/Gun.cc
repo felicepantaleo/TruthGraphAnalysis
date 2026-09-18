@@ -3,7 +3,6 @@
 #include "TruthGraphAnalysis/Gun/cpp/Gun.h"
 
 #include <cmath>
-#include <map>
 #include <string>
 #include <vector>
 
@@ -13,8 +12,6 @@
 
 namespace tga::gun {
 
-  using tga::decayMode;
-  using tga::firstChildWithPdgId;
   using tga::fixed;
 
   void run(truth::Graph const& graph, std::ostream& out) {

@@ -19,7 +19,7 @@ import diboson  # noqa: E402
 
 class TestDiboson(unittest.TestCase):
     def test_matches_the_expected_output(self):
-        graph = TruthGraphView.fromJson(os.path.join(HERE, "..", "..", "Common", "fixtures", "top_diboson_seeds.json"))
+        graph = TruthGraphView.fromJson(os.path.join(HERE, "..", "..", "Common", "fixtures", "diboson.json"))
         out = io.StringIO()
         diboson.run(graph, out)
         with open(os.path.join(HERE, "expected.txt"), encoding="utf-8") as handle:

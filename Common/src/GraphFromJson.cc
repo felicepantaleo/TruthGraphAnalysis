@@ -33,12 +33,41 @@ namespace {
     }
   }
 
+  bool isKnownLevel(std::string const& name) {
+    for (auto const& row : truth::kLevelTable) {
+      if (name == row.name) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // The dumper writes null for a value that is not a number; graphTools reads it as 0.
+  double numberOr0(nlohmann::json const& value) { return value.is_null() ? 0. : value.get<double>(); }
+
+  // The names come from truth::particleRoleName, so a renamed role still matches; an
+  // unknown one throws, as roleOf does for a vertex.
+  uint8_t particleRoleOf(std::string const& name) {
+    for (const auto role :
+         {truth::ParticleRole::Normal, truth::ParticleRole::Connector, truth::ParticleRole::SignalStandIn}) {
+      if (name == truth::particleRoleName(role)) {
+        return static_cast<uint8_t>(role);
+      }
+    }
+    throw std::runtime_error("unknown particle role " + name);
+  }
+
   uint32_t levelFlagsOf(nlohmann::json const& names) {
     uint32_t flags = 0;
     for (auto const& name : names) {
       const std::string level = name.get<std::string>();
       if (level == truth::kSignalLevelName) {
         flags |= static_cast<uint32_t>(truth::LevelFlag::Signal);
+        continue;
+      }
+      // A level this build does not know is skipped, as graphTools skips it, so a dump
+      // written by a newer release still reads.
+      if (!isKnownLevel(level)) {
         continue;
       }
       flags |= static_cast<uint32_t>(truth::levelFlagOf(truth::levelFromName(level)));
@@ -96,10 +125,10 @@ namespace tga {
       data.eventId = item.at("eventId").get<uint64_t>();
       data.genEvent = item.at("genEvent").get<int32_t>();
       data.levelFlags = levelFlagsOf(item.at("levels"));
-      const std::string role = item.at("role").get<std::string>();
-      data.role = role == "Connector" ? 1 : role == "SignalStandIn" ? 2 : 0;
+      data.role = particleRoleOf(item.at("role").get<std::string>());
       auto const& p4 = item.at("p4");
-      data.momentum = math::XYZTLorentzVectorD(p4.at(0), p4.at(1), p4.at(2), p4.at(3));
+      data.momentum =
+          math::XYZTLorentzVectorD(numberOr0(p4.at(0)), numberOr0(p4.at(1)), numberOr0(p4.at(2)), numberOr0(p4.at(3)));
     }
 
     auto& vertices = graph.vertices();
@@ -114,7 +143,8 @@ namespace tga {
       data.role = roleOf(item.at("role").get<std::string>());
       data.reason = reasonOf(item.at("reason").get<std::string>());
       auto const& x4 = item.at("x4");
-      data.position = math::XYZTLorentzVectorD(x4.at(0), x4.at(1), x4.at(2), x4.at(3));
+      data.position =
+          math::XYZTLorentzVectorD(numberOr0(x4.at(0)), numberOr0(x4.at(1)), numberOr0(x4.at(2)), numberOr0(x4.at(3)));
       for (auto const& particle : item.at("in")) {
         decay.emplace_back(particle.get<uint32_t>(), id);
         incoming.emplace_back(id, particle.get<uint32_t>());

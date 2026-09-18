@@ -13,8 +13,6 @@
 
 namespace tga::full {
 
-  using tga::decayMode;
-  using tga::firstChildWithPdgId;
   using tga::fixed;
 
   void run(truth::Graph const& graph, std::ostream& out) {

@@ -3,7 +3,6 @@
 #include "TruthGraphAnalysis/HeavyFlavor/cpp/HeavyFlavor.h"
 
 #include <cmath>
-#include <map>
 #include <string>
 #include <vector>
 
@@ -13,8 +12,6 @@
 
 namespace tga::heavyflavor {
 
-  using tga::decayMode;
-  using tga::firstChildWithPdgId;
   using tga::fixed;
 
   void run(truth::Graph const& graph, std::ostream& out) {
@@ -33,7 +30,10 @@ namespace tga::heavyflavor {
       }
       std::size_t charm = 0;
       for (auto const& member : branch.members()) {
-        charm += member.data().isAtLevel(truth::LevelFlag::CHadrons) ? 1 : 0;
+        // Below the B hadron: a B_c is in both levels, and it is not below itself.
+        if (member.id() != hadron.id()) {
+          charm += member.data().isAtLevel(truth::LevelFlag::CHadrons) ? 1 : 0;
+        }
       }
       out << "heavyflavor: " << hadron.pdgId() << " pt " << fixed(hadron.momentum().pt()) << " GeV, flight " << flight
           << ", " << charm << " charm hadron" << (charm == 1 ? "" : "s") << " below\n";

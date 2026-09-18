@@ -1,0 +1,8 @@
+<bin name="Tau_t" file="../cpp/Tau.cc,Tau_t.cc">
+  <use name="PhysicsTools/TruthInfo"/>
+  <use name="SimDataFormats/TruthInfo"/>
+  <use name="TruthGraphAnalysis/Common"/>
+  <use name="cppunit"/>
+</bin>
+
+<test name="tau_py_t" command="python3 ${LOCALTOP}/src/TruthGraphAnalysis/Tau/test/tau_test.py"/>

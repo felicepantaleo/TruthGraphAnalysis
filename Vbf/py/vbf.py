@@ -10,19 +10,15 @@ The C++ twin is cpp/Vbf.cc and prints the same lines.
 """
 
 import argparse
-import math
 import sys
 
-from PhysicsTools.TruthInfo.graphTools import bunchCrossingOf, eventIndexOf
-from TruthGraphAnalysis.Common.exampleSupport import (LEPTONS, NEUTRINOS, add, decayMode, eta,
-                                                      firstChildWithPdgId, graphsFrom, mass,
-                                                      productionSiblings, pt)
+from TruthGraphAnalysis.Common.exampleSupport import add, eta, eventNumber, graphsFrom, isParton, mass, pt
 
 
 def run(graph, out=sys.stdout):
     """Prints one line per object of interest."""
-    higgs = graph.particlesOfLevel("signal")
-    tagging = [i for i in graph.particlesOfLevel("partonJets") if graph.isSignal(i)]
+    higgs = graph.signalParticles()
+    tagging = [s for s in graph.productionSiblings(higgs[0]) if isParton(graph.pdgId(s))] if higgs else []
     if len(tagging) < 2:
         out.write("vbf: %d Higgs, %d tagging partons\n" % (len(higgs), len(tagging)))
         return
@@ -39,7 +35,7 @@ def main():
     parser.add_argument("inputs", nargs="+", help="an EDM file, or one or more JSON dumps")
     args = parser.parse_args()
     for graph in graphsFrom(args.inputs, args.maxEvents):
-        print("== event %s" % (graph.eventId,))
+        print("== event %s" % eventNumber(graph))
         run(graph)
 
 
