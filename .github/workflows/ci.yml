@@ -11,7 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: pip install clang-format==21.1.4
+      # The release ships clang-format 21.1.4, which PyPI does not carry. 21.1.5 is the
+      # nearest build of the same minor and gives byte-identical output on every file of
+      # this repository, checked against the release binary.
+      - run: pip install clang-format==21.1.5
       - name: Every C++ file matches the CMSSW style
         run: clang-format --style=file --dry-run -Werror $(git ls-files '*.cc' '*.h')
 
@@ -40,29 +43,47 @@ jobs:
   cmssw:
     name: CMSSW build, clang-tidy and tests
     runs-on: ubuntu-latest
-    container:
-      image: cmssw/el8:x86_64
-      options: -v /cvmfs:/cvmfs:shared
     env:
+      # An IB, so cvmfs keeps it for about two weeks. The build falls back to the newest
+      # CMSSW_20_1_X IB on cvmfs once this one is gone.
       RELEASE: CMSSW_20_1_X_2026-09-13-2300
+      BRANCH: truth-adaptive-associator-v1
+      SCRAM_ARCH: el8_amd64_gcc14
     steps:
+      # The action installs cvmfs on the runner itself, so it must run on the runner and
+      # not inside the EL8 container, which carries no /etc/lsb-release.
       - uses: cvmfs-contrib/github-action-cvmfs@v4
         with:
           cvmfs_repositories: cms.cern.ch,cms-ib.cern.ch
       - uses: actions/checkout@v4
         with:
-          path: example-repo
-      - name: Build against the branch
-        shell: bash
+          path: TruthGraphAnalysis
+      - name: Build against the branch and run the tests
         run: |
+          cat > build.sh <<'SCRIPT'
+          set -eo pipefail
           source /cvmfs/cms.cern.ch/cmsset_default.sh
-          scram project $RELEASE
-          cd $RELEASE/src
+          if ! scram project "$RELEASE"; then
+            RELEASE=$(scram list -c CMSSW 2>/dev/null | grep -o 'CMSSW_20_1_X_[0-9-]*' | sort -u | tail -1)
+            echo "the pinned IB is gone from cvmfs, building against $RELEASE"
+            scram project "$RELEASE"
+          fi
+          cd "$RELEASE/src"
           eval "$(scram runtime -sh)"
-          git config --global user.name ci && git config --global user.email ci@example.invalid
-          git cms-init --upstream-only
-          git cms-merge-topic felicepantaleo:truth-adaptive-associator-v1
-          cp -r "$GITHUB_WORKSPACE/example-repo" TruthGraphAnalysis
-          scram b -j 2
-          scram build code-checks
+          # Only the two packages the examples build against. A blobless sparse clone
+          # takes seconds, where a full CMSSW checkout takes minutes.
+          git clone --depth 1 --filter=blob:none --sparse -b "$BRANCH" \
+            https://github.com/felicepantaleo/cmssw.git /tmp/branch
+          git -C /tmp/branch sparse-checkout set SimDataFormats/TruthInfo PhysicsTools/TruthInfo
+          cp -r /tmp/branch/SimDataFormats /tmp/branch/PhysicsTools .
+          cp -r /work/TruthGraphAnalysis .
+          scram b -j "$(nproc)"
+          cd TruthGraphAnalysis
+          # code-checks asks git which files changed, and this area is not a git
+          # checkout. code-checks-all runs clang-tidy over every file of the package.
+          scram build code-checks-all
           scram b runtests
+          SCRIPT
+          docker run --rm -v /cvmfs:/cvmfs:shared -v "$PWD:/work" -w /work \
+            -e RELEASE -e BRANCH -e SCRAM_ARCH \
+            cmssw/el8:x86_64 bash /work/build.sh
