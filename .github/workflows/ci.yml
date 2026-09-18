@@ -10,7 +10,7 @@ jobs:
     name: clang-format
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       # The release ships clang-format 21.1.4, which PyPI does not carry. 21.1.5 is the
       # nearest build of the same minor and gives byte-identical output on every file of
       # this repository, checked against the release binary.
@@ -22,8 +22,8 @@ jobs:
     name: python tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Fetch graphTools from the CMSSW branch
@@ -52,10 +52,10 @@ jobs:
     steps:
       # The action installs cvmfs on the runner itself, so it must run on the runner and
       # not inside the EL8 container, which carries no /etc/lsb-release.
-      - uses: cvmfs-contrib/github-action-cvmfs@v4
+      - uses: cvmfs-contrib/github-action-cvmfs@v5
         with:
           cvmfs_repositories: cms.cern.ch,cms-ib.cern.ch
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: TruthGraphAnalysis
       - name: Build against the branch and run the tests
