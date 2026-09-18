@@ -16,17 +16,11 @@ namespace tga::diboson {
   using tga::decayMode;
   using tga::firstChildWithPdgId;
   using tga::fixed;
-  using tga::isLepton;
-  using tga::isWeakBoson;
-  using tga::lastCopy;
-  using tga::membersOf;
-  using tga::productionSiblings;
-  using tga::signalRoots;
 
   void run(truth::Graph const& graph, std::ostream& out) {
     std::vector<truth::Particle> bosons;
-    for (auto const& root : signalRoots(graph)) {
-      if (isWeakBoson(root.pdgId())) {
+    for (auto const& root : graph.signalParticles()) {
+      if (truth::isWeakBoson(root.pdgId())) {
         bosons.push_back(root);
       }
     }

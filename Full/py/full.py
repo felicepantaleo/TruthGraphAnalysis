@@ -21,7 +21,7 @@ from TruthGraphAnalysis.Common.exampleSupport import (LEPTONS, NEUTRINOS, add, d
 
 def run(graph, out=sys.stdout):
     """Prints one line per object of interest."""
-    for eventId in graph.interactions():
+    for eventId in graph.interactionIds():
         out.write("full: interaction bx %d index %d: %d particles\n"
                   % (bunchCrossingOf(eventId), eventIndexOf(eventId), len(graph.particlesOfInteraction(eventId))))
     for side, keep in (("signal", graph.isSignal), ("pileup", graph.isFromPileup)):

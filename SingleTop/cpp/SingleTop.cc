@@ -16,16 +16,10 @@ namespace tga::singletop {
   using tga::decayMode;
   using tga::firstChildWithPdgId;
   using tga::fixed;
-  using tga::isLepton;
-  using tga::isWeakBoson;
-  using tga::lastCopy;
-  using tga::membersOf;
-  using tga::productionSiblings;
-  using tga::signalRoots;
 
   void run(truth::Graph const& graph, std::ostream& out) {
-    for (auto const& t : signalRoots(graph)) {
-      for (auto const& partner : productionSiblings(t)) {
+    for (auto const& t : graph.signalParticles()) {
+      for (auto const& partner : t.productionSiblings()) {
         out << "singletop: top with partner " << partner.pdgId() << " pt " << fixed(partner.momentum().pt())
             << " GeV\n";
       }

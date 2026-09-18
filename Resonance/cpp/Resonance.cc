@@ -16,18 +16,12 @@ namespace tga::resonance {
   using tga::decayMode;
   using tga::firstChildWithPdgId;
   using tga::fixed;
-  using tga::isLepton;
-  using tga::isWeakBoson;
-  using tga::lastCopy;
-  using tga::membersOf;
-  using tga::productionSiblings;
-  using tga::signalRoots;
 
   void run(truth::Graph const& graph, std::ostream& out) {
-    for (auto const& z : signalRoots(graph)) {
+    for (auto const& z : graph.signalParticles()) {
       std::vector<truth::Particle> legs;
-      for (auto const& child : lastCopy(z).children()) {
-        if (isLepton(child.pdgId())) {
+      for (auto const& child : z.lastCopy().children()) {
+        if (truth::isLepton(child.pdgId())) {
           legs.push_back(child);
         }
       }

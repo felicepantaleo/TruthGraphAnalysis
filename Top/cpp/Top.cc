@@ -16,16 +16,10 @@ namespace tga::top {
   using tga::decayMode;
   using tga::firstChildWithPdgId;
   using tga::fixed;
-  using tga::isLepton;
-  using tga::isWeakBoson;
-  using tga::lastCopy;
-  using tga::membersOf;
-  using tga::productionSiblings;
-  using tga::signalRoots;
 
   void run(truth::Graph const& graph, std::ostream& out) {
     int leptonic = 0;
-    for (auto const& t : signalRoots(graph)) {
+    for (auto const& t : graph.signalParticles()) {
       const auto b = firstChildWithPdgId(t, {5});
       const auto w = firstChildWithPdgId(t, {24});
       const std::string mode = w ? decayMode(*w) : "none";

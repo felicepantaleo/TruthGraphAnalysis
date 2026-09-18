@@ -16,15 +16,9 @@ namespace tga::ggf {
   using tga::decayMode;
   using tga::firstChildWithPdgId;
   using tga::fixed;
-  using tga::isLepton;
-  using tga::isWeakBoson;
-  using tga::lastCopy;
-  using tga::membersOf;
-  using tga::productionSiblings;
-  using tga::signalRoots;
 
   void run(truth::Graph const& graph, std::ostream& out) {
-    for (auto const& higgs : signalRoots(graph)) {
+    for (auto const& higgs : graph.signalParticles()) {
       const truth::Branch branch(&graph, higgs.id());
       std::size_t products = 0;
       double visible = 0.;

@@ -16,12 +16,6 @@ namespace tga::heavyflavor {
   using tga::decayMode;
   using tga::firstChildWithPdgId;
   using tga::fixed;
-  using tga::isLepton;
-  using tga::isWeakBoson;
-  using tga::lastCopy;
-  using tga::membersOf;
-  using tga::productionSiblings;
-  using tga::signalRoots;
 
   void run(truth::Graph const& graph, std::ostream& out) {
     for (auto const& branch : truth::branchesAtLevel(graph, truth::Level::BHadrons)) {

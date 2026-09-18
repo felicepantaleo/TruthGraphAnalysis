@@ -16,17 +16,11 @@ namespace tga::vbf {
   using tga::decayMode;
   using tga::firstChildWithPdgId;
   using tga::fixed;
-  using tga::isLepton;
-  using tga::isWeakBoson;
-  using tga::lastCopy;
-  using tga::membersOf;
-  using tga::productionSiblings;
-  using tga::signalRoots;
 
   void run(truth::Graph const& graph, std::ostream& out) {
-    const auto higgs = signalRoots(graph);
+    const auto higgs = graph.signalParticles();
     std::vector<truth::Particle> tagging;
-    for (auto const& parton : membersOf(graph, truth::Level::PartonJets)) {
+    for (auto const& parton : truth::particlesAtLevel(graph, truth::Level::PartonJets)) {
       if (parton.data().isSignal()) {
         tagging.push_back(parton);
       }
