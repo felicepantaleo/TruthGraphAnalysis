@@ -48,7 +48,7 @@ process.example = cms.EDAnalyzer("TruthGraph%sExample" % args.example, src=cms.I
 process.p = cms.Path(process.example)
 
 if args.rebuild:
-    from PhysicsTools.TruthInfo.truthGraphSelections import postProcessingPSet
+    from PhysicsTools.TruthInfo.customiseTruthPreset import applyTruthPreset
     from Validation.Configuration.truthPrevalidation_cff import truthLogicalGraphProducer as _logical
     process.truthGraphProducer = cms.EDProducer(
         "TruthGraphProducer",
@@ -58,14 +58,13 @@ if args.rebuild:
         simVertices=cms.InputTag("g4SimHits"),
         addGenToSimEdges=cms.bool(True),
     )
+    process.truthLogicalGraphProducer = _logical.clone(src=cms.InputTag("truthGraphProducer"))
+    # One call sets the preset on every module that has to agree on it, and prints which
+    # preset it resolved. Name the fragment, or name the preset.
     if args.fragment is not None:
-        selection = postProcessingPSet(name=args.fragment)
+        applyTruthPreset(process, fragment=args.fragment)
     else:
-        selection = postProcessingPSet(template=PRESET_OF[args.example])
-    process.truthLogicalGraphProducer = _logical.clone(
-        src=cms.InputTag("truthGraphProducer"),
-        postProcessing=selection,
-    )
+        applyTruthPreset(process, preset=PRESET_OF[args.example])
     process.example.src = cms.InputTag("truthLogicalGraphProducer")
     process.p.insert(0, process.truthGraphProducer + process.truthLogicalGraphProducer)
 

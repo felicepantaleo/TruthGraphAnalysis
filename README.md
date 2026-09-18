@@ -66,6 +66,33 @@ python3 TruthGraphAnalysis/Top/py/top.py TruthGraphAnalysis/Common/fixtures/top.
 python3 TruthGraphAnalysis/Top/py/top.py step3.root
 ```
 
+## Running on your own sample
+
+A production file holds the graph with no selection preset, so the signal level is empty
+in it. To build the graph again with a preset, over a GEN-SIM sample that already exists,
+name the preset or name the generator fragment it came from:
+
+```bash
+cmsDriver.py step3 --filein file:step2.root ... \
+  --customise_commands "from PhysicsTools.TruthInfo.customiseTruthPreset import applyTruthPreset; applyTruthPreset(process, preset='top')"
+
+# the same thing with the fragment name, which the rules resolve to a preset
+TRUTH_GRAPH_FRAGMENT=TTbar_14TeV_TuneCP5_cfi cmsDriver.py step3 ... \
+  --customise PhysicsTools/TruthInfo/customiseTruthPreset.customiseTruthPreset
+```
+
+The job prints the preset it resolved and its seed species, so the log says which view was
+built. One call is enough because the preset decides which particle is the signal, and the
+graph producer and the truth-side targets producer both have to read the same answer.
+`Common/test/runExample_cfg.py` uses the same call under `--rebuild`.
+
+To see which preset a fragment maps to before running anything:
+
+```bash
+python3 $CMSSW_BASE/src/PhysicsTools/TruthInfo/python/truthGraphSelections.py \
+    TTbar_14TeV_TuneCP5_cfi --name
+```
+
 ## Code style
 
 `.clang-format` and `.clang-tidy` are the ones of the CMSSW release, so
