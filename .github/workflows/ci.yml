@@ -31,7 +31,7 @@ jobs:
           mkdir -p pyroot/PhysicsTools/TruthInfo pyroot/TruthGraphAnalysis/Common
           touch pyroot/PhysicsTools/__init__.py pyroot/PhysicsTools/TruthInfo/__init__.py
           touch pyroot/TruthGraphAnalysis/__init__.py pyroot/TruthGraphAnalysis/Common/__init__.py
-          curl -sSfL https://raw.githubusercontent.com/felicepantaleo/cmssw/truth-adaptive-associator-v1/PhysicsTools/TruthInfo/python/graphTools.py \
+          curl -sSfL https://raw.githubusercontent.com/felicepantaleo/cmssw/truth-association-tie-descendant/PhysicsTools/TruthInfo/python/graphTools.py \
             -o pyroot/PhysicsTools/TruthInfo/graphTools.py
           cp Common/python/*.py pyroot/TruthGraphAnalysis/Common/
       - name: Run every python test
@@ -47,7 +47,7 @@ jobs:
       # An IB, so cvmfs keeps it for about two weeks. The build falls back to the newest
       # CMSSW_20_1_X IB on cvmfs once this one is gone.
       RELEASE: CMSSW_20_1_X_2026-09-13-2300
-      BRANCH: truth-adaptive-associator-v1
+      BRANCH: truth-association-tie-descendant
       SCRAM_ARCH: el8_amd64_gcc14
     steps:
       # The action installs cvmfs on the runner itself, so it must run on the runner and

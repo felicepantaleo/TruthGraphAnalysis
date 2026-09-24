@@ -1,0 +1,7 @@
+<bin name="Mtd_t" file="../cpp/MtdTruth.cc,Mtd_t.cc">
+  <use name="DataFormats/ForwardDetId"/>
+  <use name="DataFormats/Math"/>
+  <use name="SimDataFormats/TruthInfo"/>
+  <use name="TruthGraphAnalysis/Common"/>
+  <use name="cppunit"/>
+</bin>

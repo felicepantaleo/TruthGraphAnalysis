@@ -19,6 +19,7 @@ event.
 | [HeavyFlavor](HeavyFlavor/README.md) | `heavyflavor` | How far does each b hadron fly before it decays, and how many charm hadrons does it leave below it? |
 | [Full](Full/README.md) | `full` | What does the whole event hold, interaction by interaction, and how large is the reconstructable final state of the signal and of the pile-up? |
 | [Tau](Tau/README.md) | none, levels only | How did each tau decay: how many charged hadrons and neutral pions, which decay mode tau reconstruction would call it, and how much of the tau energy is visible? |
+| [Mtd](Mtd/README.md) | none, reconstruction job | Port of `MtdTracksValidation`: does the MTD cluster on a track come from the particle that made the track? Runs in a RECO job, next to the original module. |
 
 ## Layout
 
@@ -51,13 +52,14 @@ hadron of a chain before 2026-08-20 and keeps the weakly decaying one since.
 
 ## Setup
 
-The examples read the graph through the interface of branch `truth-adaptive-associator-v1`
-(felicepantaleo/cmssw), which is PR #51829. In a CMSSW area:
+The examples read the graph through the interface of branch `truth-association-tie-descendant`
+(felicepantaleo/cmssw): PR #51829 and its follow-up, which the `Mtd` example needs for the
+MTD hit channel. In a CMSSW area:
 
 ```bash
 cmsrel CMSSW_20_1_X_2026-09-13-2300 && cd CMSSW_20_1_X_2026-09-13-2300/src && cmsenv
 git cms-init
-git cms-merge-topic felicepantaleo:truth-adaptive-associator-v1
+git cms-merge-topic felicepantaleo:truth-association-tie-descendant
 git clone git@github.com:felicepantaleo/TruthGraphAnalysis.git TruthGraphAnalysis
 scram b -j 8
 scram b runtests
