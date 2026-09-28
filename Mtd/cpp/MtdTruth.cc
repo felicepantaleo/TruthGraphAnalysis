@@ -21,7 +21,7 @@ namespace tga::mtd {
   }
 
   bool passesSelection(truth::Graph const& graph, uint32_t particleId, TruthSelection const& cuts) {
-    if (truth::Particle(&graph, particleId).threeCharge() == 0)
+    if (truth::Particle(&graph, particleId).charge() == 0.)
       return false;
     auto const& p4 = graph.particles()[particleId].momentum;
     if (std::abs(p4.eta()) >= cuts.etaMax || p4.pt() <= cuts.ptMin)

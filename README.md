@@ -52,14 +52,13 @@ hadron of a chain before 2026-08-20 and keeps the weakly decaying one since.
 
 ## Setup
 
-The examples read the graph through the interface of branch `truth-association-tie-descendant`
-(felicepantaleo/cmssw): PR #51829 and its follow-up, which the `Mtd` example needs for the
-MTD hit channel. In a CMSSW area:
+The examples read the graph through the interface of branch `truth-adaptive-associator-v1`
+(felicepantaleo/cmssw), the branch of PR #51829. In a CMSSW area:
 
 ```bash
-cmsrel CMSSW_20_1_X_2026-09-13-2300 && cd CMSSW_20_1_X_2026-09-13-2300/src && cmsenv
+cmsrel CMSSW_20_1_X_2026-09-28-1100 && cd CMSSW_20_1_X_2026-09-28-1100/src && cmsenv
 git cms-init
-git cms-merge-topic felicepantaleo:truth-association-tie-descendant
+git cms-merge-topic felicepantaleo:truth-adaptive-associator-v1
 git clone git@github.com:felicepantaleo/TruthGraphAnalysis.git TruthGraphAnalysis
 scram b -j 8
 scram b runtests

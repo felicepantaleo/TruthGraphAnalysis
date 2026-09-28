@@ -19,7 +19,7 @@ clusters on each track, the same time `t0safe`. Only the truth questions change 
 |---|---|---|
 | Which particle made the track? | `trackingParticleRecoTrackAsssociation`, first in-time TP | track map `generalTracksRecoToTruthFixed`, best in-time particle with score at most 0.25 |
 | In time? | `tp.eventId().bunchCrossing() == 0` | `ParticleData::bunchCrossing() == 0` |
-| Charged, eta, pt | `tp.charge()`, `tp.eta()`, `tp.pt()` | `Particle::threeCharge()`, `ParticleData::momentum` |
+| Charged, eta, pt | `tp.charge()`, `tp.eta()`, `tp.pt()` | `Particle::charge()`, `ParticleData::momentum` |
 | Produced inside the MTD volume | `tp.parentVertex()->position()` | the production vertex, in cm and ns |
 | Generator final state | `tp.status() == 1` | `ParticleData::status == 1` |
 | What did it leave in the MTD, directly or through a secondary, and when? | `mtdSimLayerClusterToTPAssociation`, `hitProdType()`, `simLCTime()` | `directHits(HitChannel::MTD, particle)` and `directHitTimes(...)`: module, cell, category, energy, time |
@@ -60,9 +60,9 @@ The customise does three things the default job does not:
 
 ## Result
 
-Both modules in one job, Run4 D127 ttbar, tracks above 0.7 GeV. It needs the follow-up
-branch `truth-association-tie-descendant` of PR 51829, which carries the cell-keyed MTD
-channel with times and categories, and the tie rule of the track map.
+Both modules in one job, Run4 D127 ttbar, tracks above 0.7 GeV. It needs PR 51829 at or
+after the commit that adds the cell-keyed MTD channel with times and categories, and the
+tie rule of the track map.
 
 | category | no pileup: legacy | graph | 5 pileup: legacy | graph |
 |---|---:|---:|---:|---:|
