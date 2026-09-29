@@ -1,0 +1,15 @@
+<use name="CommonTools/UtilAlgos"/>
+<use name="DataFormats/ParticleFlowCandidate"/>
+<use name="DataFormats/ParticleFlowReco"/>
+<use name="DataFormats/TrackReco"/>
+<use name="FWCore/Framework"/>
+<use name="FWCore/MessageLogger"/>
+<use name="FWCore/ParameterSet"/>
+<use name="FWCore/ServiceRegistry"/>
+<use name="SimDataFormats/Associations"/>
+<use name="SimDataFormats/TruthInfo"/>
+<use name="root"/>
+
+<library file="../cpp/PFCandidateTruthAnalyzer.cc" name="TruthGraphParticleFlowExamplePlugins">
+  <flags EDM_PLUGIN="1"/>
+</library>

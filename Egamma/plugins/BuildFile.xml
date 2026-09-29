@@ -1,0 +1,14 @@
+<use name="CommonTools/UtilAlgos"/>
+<use name="DataFormats/GsfTrackReco"/>
+<use name="DataFormats/Math"/>
+<use name="FWCore/Framework"/>
+<use name="FWCore/MessageLogger"/>
+<use name="FWCore/ParameterSet"/>
+<use name="FWCore/ServiceRegistry"/>
+<use name="PhysicsTools/TruthInfo"/>
+<use name="SimDataFormats/TruthInfo"/>
+<use name="root"/>
+
+<library file="../cpp/GsfTrackTruthAnalyzer.cc" name="TruthGraphEgammaExamplePlugins">
+  <flags EDM_PLUGIN="1"/>
+</library>

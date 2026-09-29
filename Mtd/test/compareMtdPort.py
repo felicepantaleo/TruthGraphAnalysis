@@ -66,8 +66,13 @@ def main(path):
     for region, rows in ROWS.items():
         print(f"{region:<40} {'legacy':>8} {'graph':>8} {'graph/legacy':>13}")
         for label, name in rows:
-            a = entries(tfile, LEGACY, [name])
-            b = entries(tfile, GRAPH, [name])
+            # A release can lack a monitor element in one of the two modules.
+            try:
+                a = entries(tfile, LEGACY, [name])
+                b = entries(tfile, GRAPH, [name])
+            except KeyError:
+                print(f"{label:<40} {'n/a':>8} {'n/a':>8}")
+                continue
             ratio = f"{b / a:13.3f}" if a else f"{'-':>13}"
             print(f"{label:<40} {a:8d} {b:8d} {ratio}")
         print()

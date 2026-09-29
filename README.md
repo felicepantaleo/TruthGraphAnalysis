@@ -4,8 +4,9 @@ Worked analyses on the CMS MC-truth graph (`truth::Graph`, cms-sw/cmssw PR #5182
 per selection preset of `PhysicsTools/TruthInfo/python/truthGraphSelections.py`, plus one
 on the tau levels, which need no preset. Every example exists twice, in C++ and in python,
 prints the same lines on the same event, and is tested against a committed graph of one
-event. Tracking and GettingStarted are the exceptions: they are for a first session, and
-they run on the files of the TruthGraphTutorial samples, not on a fixture.
+event. Tracking, Egamma, ParticleFlow and GettingStarted are the exceptions: they are for
+a first session, and they run on the files of the TruthGraphTutorial samples, not on a
+fixture.
 
 | example | preset | question |
 |---|---|---|
@@ -23,6 +24,8 @@ they run on the files of the TruthGraphTutorial samples, not on a fixture.
 | [Mtd](Mtd/README.md) | none, reconstruction job | Port of `MtdTracksValidation`: does the MTD cluster on a track come from the particle that made the track? Runs in a RECO job, next to the original module. |
 | [Tracking](Tracking/README.md) | none, reconstruction file | What are the efficiency, the fake rate and the duplicate rate of the tracks, with the definitions of `MultiTrackValidator`? Reads the truth association maps in `step3.root`. |
 | [GettingStarted](GettingStarted/README.md) | none | Four short python scripts for a first look: one event, tau decay products, the Z mass, a pileup event. |
+| [Egamma](Egamma/README.md) | none, reconstruction file | Which particle made each GSF track? Runs the hit associator on `electronGsfTracks` and compares the Z electrons it finds with a delta R match. |
+| [ParticleFlow](ParticleFlow/README.md) | none, reconstruction file | Does the type of each PF candidate agree with the particle that made it? Reads the track and PF cluster maps. |
 
 ## Layout
 

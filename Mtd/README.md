@@ -48,6 +48,17 @@ cmsDriver.py step3 ... --customise TruthGraphAnalysis/Mtd/customiseMtdGraphValid
 python3 TruthGraphAnalysis/Mtd/test/compareMtdPort.py DQM_V0001_R000000001__Global__CMSSW_X_Y_Z__RECO.root
 ```
 
+To run the port on a finished `step3.root`, with no reconstruction, harvest its output
+together with the `step3_inDQM.root` of the same events, which holds the legacy folder:
+
+```bash
+cmsRun TruthGraphAnalysis/Mtd/test/mtdGraphOnStep3_cfg.py -i step3.root -o mtdGraph_inDQM.root
+cmsDriver.py step4 -s HARVESTING:@phase2Validation -n -1 --conditions auto:phase2_realistic_T35 \
+    --geometry ExtendedRun4D122 --era Phase2C26I13M9 --mc --scenario pp --filetype DQM \
+    --filein file:mtdGraph_inDQM.root,file:step3_inDQM.root
+python3 TruthGraphAnalysis/Mtd/test/compareMtdPort.py DQM_V0001_R000000001__Global__CMSSW_X_Y_Z__RECO.root
+```
+
 The customise does three things the default job does not:
 
 1. It builds the MTD channel of the hit index, `truthMtdHitIndex`, which the default DIGI
