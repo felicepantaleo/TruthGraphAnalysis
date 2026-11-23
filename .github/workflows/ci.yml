@@ -73,7 +73,15 @@ jobs:
           # code-checks asks git which files changed, and this area is not a git
           # checkout. code-checks-all runs clang-tidy over every file of the package.
           scram build code-checks-all
-          scram b runtests
+          # scram b runtests exits 0 when a test fails, so read its summary lines.
+          scram b runtests 2>&1 | tee /work/runtests.log
+          if grep -E '^Fail ' /work/runtests.log; then
+            for t in $(grep -E '^Fail ' /work/runtests.log | awk '{print $NF}'); do
+              echo "== log of $t"
+              cat "$CMSSW_BASE/tmp/$SCRAM_ARCH/src/$(dirname "$t")/test/$(basename "$t")/testing.log" || true
+            done
+            exit 1
+          fi
           SCRIPT
           docker run --rm -v /cvmfs:/cvmfs:shared -v "$PWD:/work" -w /work \
             -e RELEASE -e SCRAM_ARCH -e SITECONFIG_PATH \
