@@ -45,6 +45,11 @@ jobs:
       # The examples build against the release with no other CMSSW package checked out.
       RELEASE: CMSSW_20_1_0_pre5
       SCRAM_ARCH: el8_amd64_gcc14
+      # MtdPort_t reads the conditions from Frontier. The default site configuration of
+      # cvmfs is the one of CERN: it takes the proxies from a host that resolves only
+      # inside CERN, and the connection fails when the host does not resolve. T3_US_OSG
+      # uses the public proxy discovery and the public Frontier servers.
+      SITECONFIG_PATH: /cvmfs/cms.cern.ch/SITECONF/T3_US_OSG
     steps:
       # The action installs cvmfs on the runner itself, so it must run on the runner and
       # not inside the EL8 container, which carries no /etc/lsb-release.
@@ -71,5 +76,5 @@ jobs:
           scram b runtests
           SCRIPT
           docker run --rm -v /cvmfs:/cvmfs:shared -v "$PWD:/work" -w /work \
-            -e RELEASE -e SCRAM_ARCH \
+            -e RELEASE -e SCRAM_ARCH -e SITECONFIG_PATH \
             cmssw/el8:x86_64 bash /work/build.sh

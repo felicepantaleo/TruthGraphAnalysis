@@ -1,0 +1,12 @@
+<use name="DataFormats/Math"/>
+<use name="FWCore/Framework"/>
+<use name="FWCore/MessageLogger"/>
+<use name="FWCore/ParameterSet"/>
+<use name="FWCore/Utilities"/>
+<use name="PhysicsTools/TruthInfo"/>
+<use name="SimDataFormats/TruthInfo"/>
+<use name="TruthGraphAnalysis/Common"/>
+
+<library file="../cpp/Boosted.cc,../cpp/BoostedPlugin.cc" name="TruthGraphBoostedExamplePlugins">
+  <flags EDM_PLUGIN="1"/>
+</library>

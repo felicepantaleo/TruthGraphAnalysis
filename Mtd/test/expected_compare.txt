@@ -1,0 +1,26 @@
+BTL                                        legacy    graph  graph/legacy
+tracks matched to truth                       721      724         1.004
+  particle with direct hits                   500      499         0.998
+    first direct cluster on the track         433      433         1.000
+    another cluster on the track               28       27         0.964
+      a later direct cluster                   17       17         1.000
+      an other cluster of it                    1        0         0.000
+      not its cluster                          10       10         1.000
+    no cluster on the track                    39       39         1.000
+  particle with other hits only               114      117         1.026
+    its cluster on the track                    1        1         1.000
+    another cluster on the track                7        9         1.286
+    no cluster on the track                   106      107         1.009
+  particle without MTD hits                   107      108         1.009
+
+ETL                                        legacy    graph  graph/legacy
+tracks matched to truth                       514      514         1.000
+  particle with MTD hits                      360      358         0.994
+    correct cluster                           271      270         0.996
+    wrong cluster                              37       36         0.973
+    no cluster                                 52       52         1.000
+  particle without MTD hits                   154      156         1.013
+
+time residual, correct cluster      legacy mean     rms   graph mean     rms  [ps]
+  BTL                                     -12.5    33.8        -12.4    33.8
+  ETL                                      -5.1    37.4         -5.1    37.4

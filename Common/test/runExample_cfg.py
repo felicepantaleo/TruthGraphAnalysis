@@ -4,6 +4,7 @@
 #
 #   cmsRun runExample_cfg.py step3.root --example Top --rebuild
 #   cmsRun runExample_cfg.py step3.root --example Gun --rebuild --fragment TenTau_E_15_500
+#   cmsRun runExample_cfg.py step3.root --example Boosted --parent top
 #
 # A production file holds the graph with no selection preset, so the signal level is
 # empty there. --rebuild builds the graph again from the GEN and SIM record in the file,
@@ -25,6 +26,8 @@ PRESET_OF = {
     "Full": "full",
     # The tau levels are graph levels, not the signal, so any preset keeps them.
     "Tau": "full",
+    # Boosted reads the hit index of the file, which belongs to the graph of the file.
+    "Boosted": "full",
 }
 
 parser = ArgumentParser()
@@ -36,6 +39,8 @@ parser.add_argument("--rebuild", action="store_true",
                     help="build the graph from the file's GEN and SIM record with the preset's selection")
 parser.add_argument("--fragment", default=None,
                     help="with --rebuild, resolve the selection from this generator fragment name")
+parser.add_argument("--parent", default="tau", choices=("tau", "top"),
+                    help="with --example Boosted, the particle whose decay products are compared")
 args = parser.parse_args()
 # A path with no scheme is a local file, relative or absolute; PoolSource would read it
 # as a logical file name otherwise.
@@ -50,7 +55,13 @@ process.maxEvents = cms.untracked.PSet(input=cms.untracked.int32(args.maxEvents)
 process.source = cms.Source("PoolSource", fileNames=cms.untracked.vstring(args.inputFile))
 process.options = cms.untracked.PSet(wantSummary=cms.untracked.bool(False))
 
+if args.rebuild and args.example == "Boosted":
+    parser.error("--example Boosted does not take --rebuild: the hit index of the file names the particles "
+                 "of the graph of the file")
+
 process.example = cms.EDAnalyzer("TruthGraph%sExample" % args.example, src=cms.InputTag(args.src))
+if args.example == "Boosted":
+    process.example.parent = cms.string(args.parent)
 process.p = cms.Path(process.example)
 
 if args.rebuild:

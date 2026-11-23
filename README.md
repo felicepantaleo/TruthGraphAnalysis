@@ -6,7 +6,8 @@ on the tau levels, which need no preset. Every example exists twice, in C++ and 
 prints the same lines on the same event, and is tested against a committed graph of one
 event. Tracking, Egamma, ParticleFlow and GettingStarted are the exceptions: they are for
 a first session, and they run on the files of the TruthGraphTutorial samples, not on a
-fixture.
+fixture. Boosted reads the hit index, which no fixture holds, so its tests use hit lists
+written by hand.
 
 | example | preset | question |
 |---|---|---|
@@ -21,6 +22,7 @@ fixture.
 | [HeavyFlavor](HeavyFlavor/README.md) | `heavyflavor` | How far does each b hadron fly before it decays, and how many charm hadrons does it leave below it? |
 | [Full](Full/README.md) | `full` | What does the whole event hold, interaction by interaction, and how large is the reconstructable final state of the signal and of the pile-up? |
 | [Tau](Tau/README.md) | none, levels only | How did each tau decay: how many charged hadrons and neutral pions, which decay mode tau reconstruction would call it, and how much of the tau energy is visible? |
+| [Boosted](Boosted/README.md) | none, levels and hit index | In a boosted tau or top: which calorimeter cells do the decay products share, and does each product keep its label, from the hits and from a Delta R match with a cone of 0.4? |
 | [Mtd](Mtd/README.md) | none, reconstruction job | Port of `MtdTracksValidation`: does the MTD cluster on a track come from the particle that made the track? Runs in a RECO job, next to the original module. |
 | [Tracking](Tracking/README.md) | none, reconstruction file | What are the efficiency, the fake rate and the duplicate rate of the tracks, with the definitions of `MultiTrackValidator`? Reads the truth association maps in `step3.root`. |
 | [GettingStarted](GettingStarted/README.md) | none | Four short python scripts for a first look: one event, tau decay products, the Z mass, a pileup event. |
@@ -69,12 +71,16 @@ scram b -j 8
 scram b runtests
 ```
 
-The tests read only the fixtures in `Common/fixtures/`. Tracking, Egamma, ParticleFlow, Mtd
-and GettingStarted read files of the TruthGraphTutorial samples
-(https://felice.web.cern.ch/orbit/TruthGraphTutorial), and the tests do not fetch these
-files. So `scram b` builds the plugins of Tracking, Egamma, ParticleFlow and Mtd, but no test
-runs them. Mtd has a unit test of its free functions only (`Mtd/test/Mtd_t.cc`).
-GettingStarted holds python scripts with no test.
+The tests read only the fixtures in `Common/fixtures/`, with one exception: `MtdPort_t`.
+It reads 20 events of the ttbar sample over https and the conditions from Frontier, so it
+needs the network. It runs `MtdTracksValidation` and the graph port in one job and compares
+the two folders with a committed table (see [Mtd](Mtd/README.md), section "Test"). Mtd also
+has a unit test of its free functions (`Mtd/test/Mtd_t.cc`).
+
+Tracking, Egamma, ParticleFlow and GettingStarted read files of the TruthGraphTutorial
+samples (https://felice.web.cern.ch/orbit/TruthGraphTutorial), and the tests do not fetch
+these files. So `scram b` builds the plugins of Tracking, Egamma and ParticleFlow, but no
+test runs them. GettingStarted holds python scripts with no test.
 
 ## Running an example
 

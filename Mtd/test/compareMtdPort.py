@@ -5,7 +5,9 @@
 
 Reads one harvested DQM file that holds both folders, MTD/Tracks and MTD/TracksGraph, and
 prints the track count of every category side by side, under the monitor element names
-the two modules share.
+the two modules share, and the mean and the RMS of the time residual. A monitor element
+that one folder does not hold prints as n/a. Mtd/test/testMtdPort.sh requires that the
+output equals Mtd/test/expected_compare.txt.
 
     python3 compareMtdPort.py DQM_V0001_R000000001__Global__CMSSW_X_Y_Z__RECO.root
 """
@@ -51,14 +53,14 @@ TIME_RES = [
 
 
 def histogram(tfile, folder, name):
-    h = tfile.Get(f"DQMData/Run 1/{folder.split('/')[0]}/Run summary/{'/'.join(folder.split('/')[1:])}/{name}")
-    if not h:
-        raise KeyError(f"{folder}/{name} is not in the file")
-    return h
+    """The monitor element, or None when the folder does not hold it."""
+    top, sub = folder.split("/", 1)
+    h = tfile.Get(f"DQMData/Run 1/{top}/Run summary/{sub}/{name}")
+    return h if h else None
 
 
-def entries(tfile, folder, names):
-    return int(sum(histogram(tfile, folder, n).GetEntries() for n in names))
+def cell(value, width, fmt="d"):
+    return f"{'n/a':>{width}}" if value is None else f"{value:{width}{fmt}}"
 
 
 def main(path):
@@ -67,21 +69,20 @@ def main(path):
         print(f"{region:<40} {'legacy':>8} {'graph':>8} {'graph/legacy':>13}")
         for label, name in rows:
             # A release can lack a monitor element in one of the two modules.
-            try:
-                a = entries(tfile, LEGACY, [name])
-                b = entries(tfile, GRAPH, [name])
-            except KeyError:
-                print(f"{label:<40} {'n/a':>8} {'n/a':>8}")
-                continue
-            ratio = f"{b / a:13.3f}" if a else f"{'-':>13}"
-            print(f"{label:<40} {a:8d} {b:8d} {ratio}")
+            a, b = (histogram(tfile, folder, name) for folder in (LEGACY, GRAPH))
+            a = None if a is None else int(a.GetEntries())
+            b = None if b is None else int(b.GetEntries())
+            ratio = f"{b / a:13.3f}" if a and b is not None else f"{'-':>13}"
+            print(f"{label:<40} {cell(a, 8)} {cell(b, 8)} {ratio}")
         print()
     print(f"{'time residual, correct cluster':<34} {'legacy mean':>12} {'rms':>7} {'graph mean':>12} {'rms':>7}  [ps]")
     for region, name in TIME_RES:
-        a = histogram(tfile, LEGACY, name)
-        b = histogram(tfile, GRAPH, name)
-        print(f"  {region:<32} {a.GetMean() * 1e3:12.1f} {a.GetRMS() * 1e3:7.1f} "
-              f"{b.GetMean() * 1e3:12.1f} {b.GetRMS() * 1e3:7.1f}")
+        columns = []
+        for folder in (LEGACY, GRAPH):
+            h = histogram(tfile, folder, name)
+            columns.append(cell(None if h is None else h.GetMean() * 1e3, 12, ".1f"))
+            columns.append(cell(None if h is None else h.GetRMS() * 1e3, 7, ".1f"))
+        print(f"  {region:<32} {' '.join(columns[:2])} {' '.join(columns[2:])}")
 
 
 if __name__ == "__main__":

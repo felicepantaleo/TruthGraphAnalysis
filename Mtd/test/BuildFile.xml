@@ -5,3 +5,5 @@
   <use name="TruthGraphAnalysis/Common"/>
   <use name="cppunit"/>
 </bin>
+
+<test name="MtdPort_t" command="bash ${LOCALTOP}/src/TruthGraphAnalysis/Mtd/test/testMtdPort.sh"/>

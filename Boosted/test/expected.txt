@@ -1,0 +1,15 @@
+parent 15: 2 products, 6 cells 10.00 GeV, 2 shared cells 3.00 GeV, shared energy fraction 0.30
+  product -211: 4 cells 4.00 GeV, 2 shared 1.00 GeV, purity 0.67, nearest product 111 at dR 0.10, Delta R label lost, hit label kept, same label no
+  product 111: 4 cells 6.00 GeV, 2 shared 2.00 GeV, purity 0.86, nearest product -211 at dR 0.10, Delta R label lost, hit label kept, same label no
+  labels kept: Delta R 0 of 2, hits 2 of 2
+parent 6: 2 products, 3 cells 7.75 GeV, 1 shared cells 3.50 GeV, shared energy fraction 0.45
+  product 5: 2 cells 7.00 GeV, 1 shared 3.00 GeV, purity 0.93, nearest product 24 at dR 0.30, Delta R label lost, hit label kept, same label no
+  product 24: 2 cells 0.75 GeV, 1 shared 0.50 GeV, purity 0.20, nearest product 5 at dR 0.30, Delta R label lost, hit label lost, same label yes
+  labels kept: Delta R 0 of 2, hits 1 of 2
+parent -6: 2 products, 2 cells 3.00 GeV, 0 shared cells 0.00 GeV, shared energy fraction 0.00
+  product -5: 1 cells 2.00 GeV, 0 shared 0.00 GeV, purity 1.00, nearest product -24 at dR 1.00, Delta R label kept, hit label kept, same label yes
+  product -24: 1 cells 1.00 GeV, 0 shared 0.00 GeV, purity 1.00, nearest product -5 at dR 1.00, Delta R label kept, hit label kept, same label yes
+  labels kept: Delta R 2 of 2, hits 2 of 2
+parent -15: 1 products, 0 cells 0.00 GeV, 0 shared cells 0.00 GeV, shared energy fraction 0.00
+  product 11: 0 cells 0.00 GeV, 0 shared 0.00 GeV, purity 0.00, no other product, Delta R label kept, hit label lost, same label no
+  labels kept: Delta R 1 of 1, hits 0 of 1

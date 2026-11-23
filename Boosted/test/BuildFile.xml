@@ -1,0 +1,9 @@
+<bin name="Boosted_t" file="../cpp/Boosted.cc,Boosted_t.cc">
+  <use name="DataFormats/Math"/>
+  <use name="PhysicsTools/TruthInfo"/>
+  <use name="SimDataFormats/TruthInfo"/>
+  <use name="TruthGraphAnalysis/Common"/>
+  <use name="cppunit"/>
+</bin>
+
+<test name="boosted_py_t" command="python3 ${LOCALTOP}/src/TruthGraphAnalysis/Boosted/test/boosted_test.py"/>
