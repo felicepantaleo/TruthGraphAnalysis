@@ -6,7 +6,13 @@
 # goes to compareMtdPort.py, and the table must equal expected_compare.txt exactly.
 # The test fails when the input cannot be read, when a job fails, or after the deadline.
 # MTD_PORT_TEST_INPUT names another copy of the same file, for example a local one.
+# TGA_SKIP_MTD_PORT_TEST=1 skips the test and says so; only the GitHub CI sets it.
 set -euo pipefail
+
+if [[ "${TGA_SKIP_MTD_PORT_TEST:-0}" == "1" ]]; then
+  echo "MtdPort_t SKIPPED: TGA_SKIP_MTD_PORT_TEST=1. The comparison did not run."
+  exit 0
+fi
 
 TEST_DIR="${CMSSW_BASE}/src/TruthGraphAnalysis/Mtd/test"
 INPUT="${MTD_PORT_TEST_INPUT:-https://felice.web.cern.ch/orbit/TruthGraphTutorial/ttbar/step3.root}"

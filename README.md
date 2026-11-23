@@ -73,7 +73,7 @@ scram b runtests
 
 The tests read only the fixtures in `Common/fixtures/`, with one exception: `MtdPort_t`.
 It reads 20 events of the ttbar sample over https and the conditions from Frontier, so it
-needs the network. It runs `MtdTracksValidation` and the graph port in one job and compares
+needs the network. The GitHub CI skips it (see [Mtd](Mtd/README.md), section "Test"). It runs `MtdTracksValidation` and the graph port in one job and compares
 the two folders with a committed table (see [Mtd](Mtd/README.md), section "Test"). Mtd also
 has a unit test of its free functions (`Mtd/test/Mtd_t.cc`).
 
@@ -128,4 +128,5 @@ python3 $CMSSW_BASE/src/PhysicsTools/TruthInfo/python/truthGraphSelections.py \
 `.clang-format` and `.clang-tidy` are the ones of the CMSSW release, so
 `scram build code-format` and `scram build code-checks` apply as in any CMSSW package.
 The CI checks the format on every push and runs the python tests without CMSSW; the
-CMSSW job builds the packages against the release, runs clang-tidy and every test.
+CMSSW job builds the packages against the release, runs clang-tidy and every test except
+`MtdPort_t`, and fails when a test fails.

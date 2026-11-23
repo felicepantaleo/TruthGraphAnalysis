@@ -117,8 +117,7 @@ The documentation page gives the full table and the measured cause of every diff
    character by character: every count of the two folders, and the mean and the RMS of
    the time residual in ps with one decimal.
 
-The test takes 25 to 40 s at CERN, and 1.5 to 2 min with the site configuration of the
-CI job. It fails when the input cannot be read, when a job fails, when a job takes more
+The test takes 25 to 40 s at CERN. It fails when the input cannot be read, when a job fails, when a job takes more
 than 900 s, and when a number changes. It needs the network: the input over https, and
 the conditions of `auto:phase2_realistic_T35` from Frontier.
 `MTD_PORT_TEST_INPUT` names another copy of the file, for example `file:/data/step3.root`.
@@ -130,12 +129,10 @@ The graph column is equal to the output of `mtdGraphOnStep3_cfg.py` without `--l
 After an intended change of the port, make the file again with the three commands of
 "Running it" and `-n 20`, and explain each number that moves.
 
-The CI job sets `SITECONFIG_PATH` to the site configuration `T3_US_OSG` of cvmfs. The
-default configuration of cvmfs is the one of CERN. It takes the Frontier proxies from a
-host that resolves only inside CERN, and the connection to the conditions fails when the
-host does not resolve. `T3_US_OSG` uses the public proxy discovery and the public
-Frontier servers. With this setting the test passes inside the container of the CI job
-(`cmssw/el8:x86_64`) at CERN. No run on a GitHub runner exists yet.
+The GitHub CI does not run the comparison. It sets `TGA_SKIP_MTD_PORT_TEST=1`, and the test
+prints that it is skipped. On a GitHub runner the job needed 600 s before it opened the
+input, and it processed no event before the deadline of 900 s (CI run 45234645372). Run
+`scram b runtests` at CERN before you push a change to Mtd.
 
 ## Limits
 
