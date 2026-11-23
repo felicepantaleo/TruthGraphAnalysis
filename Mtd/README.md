@@ -71,9 +71,9 @@ The customise does three things the default job does not:
 
 ## Result
 
-Both modules in one job, Run4 D127 ttbar, tracks above 0.7 GeV. It needs PR 51829 at or
-after the commit that adds the cell-keyed MTD channel with times and categories, and the
-tie rule of the track map.
+Both modules in one job, Run4 D127 ttbar, tracks above 0.7 GeV. It needs the cell-keyed
+MTD channel with times and categories, and the tie rule of the track map.
+`CMSSW_20_1_0_pre5` holds both.
 
 | category | no pileup: legacy | graph | 5 pileup: legacy | graph |
 |---|---:|---:|---:|---:|

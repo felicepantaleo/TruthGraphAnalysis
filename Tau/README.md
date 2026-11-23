@@ -27,7 +27,7 @@ See `cpp/Tau.cc` and `py/tau.py`: the two print the same lines.
 ## Run it
 
 ```bash
-# C++, in a CMSSW area with the branch and this repository checked out. The tau levels
+# C++, in a CMSSW area with this repository checked out. The tau levels
 # need no preset, so the graph in the file is used as it is.
 cmsRun TruthGraphAnalysis/Common/test/runExample_cfg.py step3.root --example Tau
 

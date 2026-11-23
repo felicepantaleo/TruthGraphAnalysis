@@ -58,17 +58,23 @@ hadron of a chain before 2026-08-20 and keeps the weakly decaying one since.
 
 ## Setup
 
-The examples read the graph through the interface of branch `truth-adaptive-associator-v1`
-(felicepantaleo/cmssw), the branch of PR #51829. In a CMSSW area:
+The examples read the graph through the interface of `CMSSW_20_1_0_pre5`. The release holds
+`SimDataFormats/TruthInfo` and `PhysicsTools/TruthInfo`, so the area needs no other CMSSW
+package. In a CMSSW area:
 
 ```bash
-cmsrel CMSSW_20_1_X_2026-09-28-1100 && cd CMSSW_20_1_X_2026-09-28-1100/src && cmsenv
-git cms-init
-git cms-merge-topic felicepantaleo:truth-adaptive-associator-v1
+cmsrel CMSSW_20_1_0_pre5 && cd CMSSW_20_1_0_pre5/src && cmsenv
 git clone git@github.com:felicepantaleo/TruthGraphAnalysis.git TruthGraphAnalysis
 scram b -j 8
 scram b runtests
 ```
+
+The tests read only the fixtures in `Common/fixtures/`. Tracking, Egamma, ParticleFlow, Mtd
+and GettingStarted read files of the TruthGraphTutorial samples
+(https://felice.web.cern.ch/orbit/TruthGraphTutorial), and the tests do not fetch these
+files. So `scram b` builds the plugins of Tracking, Egamma, ParticleFlow and Mtd, but no test
+runs them. Mtd has a unit test of its free functions only (`Mtd/test/Mtd_t.cc`).
+GettingStarted holds python scripts with no test.
 
 ## Running an example
 
@@ -116,4 +122,4 @@ python3 $CMSSW_BASE/src/PhysicsTools/TruthInfo/python/truthGraphSelections.py \
 `.clang-format` and `.clang-tidy` are the ones of the CMSSW release, so
 `scram build code-format` and `scram build code-checks` apply as in any CMSSW package.
 The CI checks the format on every push and runs the python tests without CMSSW; the
-CMSSW job builds the packages against the branch, runs clang-tidy and every test.
+CMSSW job builds the packages against the release, runs clang-tidy and every test.

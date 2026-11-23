@@ -13,7 +13,7 @@ From `signal`, keeping the tops, the first b and W child of each, and its descen
 ## Run it
 
 ```bash
-# C++, in a CMSSW area with the branch and this repository checked out
+# C++, in a CMSSW area with this repository checked out
 cmsRun TruthGraphAnalysis/Common/test/runExample_cfg.py step3.root --example Top --rebuild
 
 # python, on a JSON dump or an EDM file

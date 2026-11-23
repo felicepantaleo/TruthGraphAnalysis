@@ -13,7 +13,7 @@ From `signal`, the production siblings of the Higgs that are partons, ordered by
 ## Run it
 
 ```bash
-# C++, in a CMSSW area with the branch and this repository checked out
+# C++, in a CMSSW area with this repository checked out
 cmsRun TruthGraphAnalysis/Common/test/runExample_cfg.py step3.root --example Vbf --rebuild
 
 # python, on a JSON dump or an EDM file

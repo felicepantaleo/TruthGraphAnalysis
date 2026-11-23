@@ -11,10 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      # The release ships clang-format 21.1.4, which PyPI does not carry. 21.1.5 is the
-      # nearest build of the same minor and gives byte-identical output on every file of
-      # this repository, checked against the release binary.
-      - run: pip install clang-format==21.1.5
+      # The version of clang-format that CMSSW_20_1_0_pre5 ships.
+      - run: pip install clang-format==23.1.3
       - name: Every C++ file matches the CMSSW style
         run: clang-format --style=file --dry-run -Werror $(git ls-files '*.cc' '*.h')
 
@@ -26,12 +24,12 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - name: Fetch graphTools from the CMSSW branch
+      - name: Fetch graphTools from the CMSSW release tag
         run: |
           mkdir -p pyroot/PhysicsTools/TruthInfo pyroot/TruthGraphAnalysis/Common
           touch pyroot/PhysicsTools/__init__.py pyroot/PhysicsTools/TruthInfo/__init__.py
           touch pyroot/TruthGraphAnalysis/__init__.py pyroot/TruthGraphAnalysis/Common/__init__.py
-          curl -sSfL https://raw.githubusercontent.com/felicepantaleo/cmssw/truth-adaptive-associator-v1/PhysicsTools/TruthInfo/python/graphTools.py \
+          curl -sSfL https://raw.githubusercontent.com/cms-sw/cmssw/CMSSW_20_1_0_pre5/PhysicsTools/TruthInfo/python/graphTools.py \
             -o pyroot/PhysicsTools/TruthInfo/graphTools.py
           cp Common/python/*.py pyroot/TruthGraphAnalysis/Common/
       - name: Run every python test
@@ -44,38 +42,26 @@ jobs:
     name: CMSSW build, clang-tidy and tests
     runs-on: ubuntu-latest
     env:
-      # An IB, so cvmfs keeps it for about two weeks. The build falls back to the newest
-      # CMSSW_20_1_X IB on cvmfs once this one is gone.
-      RELEASE: CMSSW_20_1_X_2026-09-28-1100
-      BRANCH: truth-adaptive-associator-v1
+      # The examples build against the release with no other CMSSW package checked out.
+      RELEASE: CMSSW_20_1_0_pre5
       SCRAM_ARCH: el8_amd64_gcc14
     steps:
       # The action installs cvmfs on the runner itself, so it must run on the runner and
       # not inside the EL8 container, which carries no /etc/lsb-release.
       - uses: cvmfs-contrib/github-action-cvmfs@v5
         with:
-          cvmfs_repositories: cms.cern.ch,cms-ib.cern.ch
+          cvmfs_repositories: cms.cern.ch
       - uses: actions/checkout@v5
         with:
           path: TruthGraphAnalysis
-      - name: Build against the branch and run the tests
+      - name: Build against the release and run the tests
         run: |
           cat > build.sh <<'SCRIPT'
           set -eo pipefail
           source /cvmfs/cms.cern.ch/cmsset_default.sh
-          if ! scram project "$RELEASE"; then
-            RELEASE=$(scram list -c CMSSW 2>/dev/null | grep -o 'CMSSW_20_1_X_[0-9-]*' | sort -u | tail -1)
-            echo "the pinned IB is gone from cvmfs, building against $RELEASE"
-            scram project "$RELEASE"
-          fi
+          scram project "$RELEASE"
           cd "$RELEASE/src"
           eval "$(scram runtime -sh)"
-          # Only the two packages the examples build against. A blobless sparse clone
-          # takes seconds, where a full CMSSW checkout takes minutes.
-          git clone --depth 1 --filter=blob:none --sparse -b "$BRANCH" \
-            https://github.com/felicepantaleo/cmssw.git /tmp/branch
-          git -C /tmp/branch sparse-checkout set SimDataFormats/TruthInfo PhysicsTools/TruthInfo
-          cp -r /tmp/branch/SimDataFormats /tmp/branch/PhysicsTools .
           cp -r /work/TruthGraphAnalysis .
           scram b -j "$(nproc)"
           cd TruthGraphAnalysis
@@ -85,5 +71,5 @@ jobs:
           scram b runtests
           SCRIPT
           docker run --rm -v /cvmfs:/cvmfs:shared -v "$PWD:/work" -w /work \
-            -e RELEASE -e BRANCH -e SCRAM_ARCH \
+            -e RELEASE -e SCRAM_ARCH \
             cmssw/el8:x86_64 bash /work/build.sh
